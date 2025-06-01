@@ -41,16 +41,24 @@ int main(int argc, char* argv[]) {
     int clicked_us = 0;
 
     int light = 0;
-    write(pout1, light);
 
     do {
+        write(pout1, light);
         write(pout2, 1);
         if (read(pin) == 0) {
             if (clicked_us == 0) {
-                write(pout1, light ^= 1);
+                light ^= 1;
+            }
+            if (clicked_us >= 800e3) {
+                light = !((int)((float)(clicked_us-800e3)/500e3)%2);
+            }
+            if (clicked_us % (int)(100e3) == 0) {
+                printf("%.0fms, light: %d\n",
+                    (float)clicked_us/1e3,
+                    light
+                );
             }
             clicked_us += tick_us;
-            printf("%.0fms, light: %d\n", (float)clicked_us/1e3, light);
         } else {
             clicked_us = 0;
         }

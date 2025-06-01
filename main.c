@@ -46,9 +46,6 @@ int main(int argc, char* argv[]) {
         write(pout1, light);
         write(pout2, 1);
         if (read(pin) == 0) {
-            if (clicked_us == 0) {
-                light ^= 1;
-            }
             if (clicked_us >= 800e3) {
                 light = !((int)((float)(clicked_us-800e3)/500e3)%2);
             }
@@ -60,6 +57,9 @@ int main(int argc, char* argv[]) {
             }
             clicked_us += tick_us;
         } else {
+            if (clicked_us != 0 && clicked_us < 800e3) {
+                light ^= 1;
+            }
             clicked_us = 0;
         }
         usleep(tick_us);

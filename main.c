@@ -23,14 +23,11 @@
 } while (0)
 
 int main(int argc, char* argv[]) {
-    int pout1 = 17;
-    int pout2 = 21;
+    int pout1 = 17; // LED
+    int pout2 = 21; // Button
     int pin = 20;
     
-    int repeat = 100;
-    int state = 1; 
-    int prev_state = 1;
-    int light = 0;
+    int repeat = 1e6;
 
     export(pout1);
     export(pout2);
@@ -40,13 +37,25 @@ int main(int argc, char* argv[]) {
     out(pout2);
     in(pin);
 
+    int tick_us = 1e3;
+    int clicked_us = 0;
+    int light = 0;
+
     do {
+        write(pout1, light);
         write(pout2, 1);
-        printf("GPIORead: %d from pin %d\n", read(pin), pin);
-        write(pout1, read(pin));
-        usleep(1000 * 1000);
-    } 
-    while (repeat--);
+        if (read(pin) == 0) {
+            if (clicked_us == 0) {
+                light ^= 1;
+            }
+            clicked_us += tick_us;
+            printf("%.0fms\n", (float)clicked_us/1e3);
+            write(pout1, 1);
+        } else {
+            clicked_us = 0;
+        }
+        usleep(tick_us);
+    } while (repeat--);
 
     unexport(pout1);
     unexport(pout2);

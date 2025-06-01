@@ -39,18 +39,18 @@ int main(int argc, char* argv[]) {
 
     int tick_us = 1e3;
     int clicked_us = 0;
+
     int light = 0;
+    write(pout1, light);
 
     do {
-        write(pout1, light);
         write(pout2, 1);
         if (read(pin) == 0) {
             if (clicked_us == 0) {
-                light ^= 1;
+                write(pout1, light ^= 1);
             }
             clicked_us += tick_us;
-            printf("%.0fms\n", (float)clicked_us/1e3);
-            write(pout1, 1);
+            printf("%.0fms, light: %d\n", (float)clicked_us/1e3, light);
         } else {
             clicked_us = 0;
         }

@@ -3,5 +3,9 @@ o.sh
 practice1_rx.c
 practice1_tx.c
 practice2_rx.c
+practice3_rx.c
+practice3_tx.c
+practice4_rx.c
+practice4_tx.c
 ready.sh
 run.sh

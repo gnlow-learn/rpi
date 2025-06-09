@@ -2,5 +2,6 @@
 o.sh
 practice1_rx.c
 practice1_tx.c
+practice2_rx.c
 ready.sh
 run.sh
